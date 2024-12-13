@@ -2,3 +2,5 @@ Flask==2.3.3
 Pillow==9.5.0
 werkzeug==2.3.7
 --no-binary Pillow 
+opencv-python-headless==4.8.0.74
+numpy==1.24.3 
