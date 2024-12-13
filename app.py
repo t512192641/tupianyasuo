@@ -6,9 +6,9 @@ import uuid
 
 app = Flask(__name__)
 
-# 配置上传文件夹
-UPLOAD_FOLDER = 'uploads'
-COMPRESSED_FOLDER = 'compressed'
+# 在 Vercel 环境中使用 /tmp 目录进行文件存储
+UPLOAD_FOLDER = '/tmp/uploads' if os.environ.get('VERCEL') else 'uploads'
+COMPRESSED_FOLDER = '/tmp/compressed' if os.environ.get('VERCEL') else 'compressed'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 # 确保上传和压缩文件夹存在
@@ -82,10 +82,8 @@ def download_file(filename):
         as_attachment=True
     )
 
+# 修改入口点
+app = app.wsgi_app if os.environ.get('VERCEL') else app
+
 if __name__ == '__main__':
-    # 开发环境使用 Flask 开发服务器
-    if app.debug:
-        app.run(debug=True)
-    # 生产环境使用 Gunicorn
-    else:
-        app.run(host='0.0.0.0', port=8000) 
+    app.run(debug=True) 
